@@ -1,39 +1,183 @@
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import meezyLogo from "@/assets/meezy-logo.png";
 import hoodie from "@/assets/hoodie.png";
 
+const STEPS = [
+  "Initializing verification protocol...",
+  "Scanning product identifiers...",
+  "Cross-referencing database...",
+  "Analyzing material signatures...",
+  "Verifying manufacturer tags...",
+  "Confirming authenticity...",
+];
+
 const Index = () => {
+  const [phase, setPhase] = useState<"loading" | "verified">("loading");
+  const [stepIndex, setStepIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (phase !== "loading") return;
+
+    const delays = [800, 1200, 1000, 1400, 900, 1100];
+    let timeout: ReturnType<typeof setTimeout>;
+    let progressInterval: ReturnType<typeof setInterval>;
+
+    const totalDuration = delays.reduce((a, b) => a + b, 0);
+    const startTime = Date.now();
+
+    progressInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      setProgress(Math.min((elapsed / totalDuration) * 100, 100));
+    }, 50);
+
+    const runStep = (i: number) => {
+      if (i >= STEPS.length) {
+        clearInterval(progressInterval);
+        setProgress(100);
+        setTimeout(() => setPhase("verified"), 600);
+        return;
+      }
+      setStepIndex(i);
+      timeout = setTimeout(() => runStep(i + 1), delays[i]);
+    };
+
+    runStep(0);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(progressInterval);
+    };
+  }, [phase]);
+
+  if (phase === "loading") {
+    return (
+      <div className="min-h-screen bg-background text-foreground font-mono flex flex-col items-center justify-center px-4">
+        <motion.img
+          src={meezyLogo}
+          alt="Meezy Archive"
+          className="h-12 object-contain mb-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+
+        <div className="w-full max-w-md space-y-6">
+          {/* Progress bar */}
+          <div className="border-2 border-foreground h-3 w-full overflow-hidden">
+            <motion.div
+              className="h-full bg-foreground"
+              style={{ width: `${progress}%` }}
+              transition={{ ease: "linear" }}
+            />
+          </div>
+
+          {/* Current step */}
+          <div className="h-6 overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={stepIndex}
+                className="text-xs tracking-[0.2em] uppercase text-muted-foreground text-center"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
+                {STEPS[stepIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          {/* Step indicators */}
+          <div className="flex justify-center gap-1.5">
+            {STEPS.map((_, i) => (
+              <motion.div
+                key={i}
+                className="h-1.5 w-6 border border-foreground"
+                animate={{
+                  backgroundColor:
+                    i <= stepIndex
+                      ? "hsl(0 0% 8%)"
+                      : "transparent",
+                }}
+                transition={{ duration: 0.3 }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <motion.p
+          className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground mt-12"
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          Authenticating
+        </motion.p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground font-mono">
       <div className="max-w-3xl mx-auto px-4 py-12 space-y-8">
         {/* Header */}
-        <div className="flex flex-col items-center gap-4">
+        <motion.div
+          className="flex flex-col items-center gap-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <img src={meezyLogo} alt="Meezy Archive" className="h-16 object-contain" />
           <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground">
             Authenticity Verification
           </p>
-        </div>
+        </motion.div>
 
         {/* Verification Badge */}
-        <div className="border-2 border-foreground p-4 text-center">
-          <p className="text-sm tracking-[0.3em] uppercase font-bold">
+        <motion.div
+          className="border-2 border-foreground p-4 text-center"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <motion.p
+            className="text-sm tracking-[0.3em] uppercase font-bold"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
             ✓ Item Authenticated
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Product Section */}
-        <div className="border-2 border-foreground">
+        <motion.div
+          className="border-2 border-foreground"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Product Image */}
             <div className="border-b-2 md:border-b-0 md:border-r-2 border-foreground p-8 flex items-center justify-center bg-secondary">
-              <img
+              <motion.img
                 src={hoodie}
                 alt="Denim Tears Mono Cotton Wreath Hoodie Navy On Navy"
                 className="max-h-72 object-contain"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
               />
             </div>
 
             {/* Product Details */}
-            <div className="p-8 space-y-6">
+            <motion.div
+              className="p-8 space-y-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1 }}
+            >
               <div>
                 <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-1">Item</p>
                 <p className="text-sm font-bold tracking-wide uppercase leading-tight">
@@ -60,12 +204,17 @@ const Index = () => {
                   <p className="text-sm font-bold">03.24.2026</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Certificate Footer */}
-        <div className="border-2 border-foreground p-6 space-y-4">
+        <motion.div
+          className="border-2 border-foreground p-6 space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
+        >
           <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
             Certificate of Authenticity
           </p>
@@ -82,7 +231,7 @@ const Index = () => {
               meezyarchive.com
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
