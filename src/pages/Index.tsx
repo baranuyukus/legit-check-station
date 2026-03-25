@@ -200,10 +200,37 @@ const Index = () => {
                   <p className="text-sm font-bold">MA-2026-00487</p>
                 </div>
                 <div>
-                  <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-1">Date</p>
+                  <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-1">Verified</p>
                   <p className="text-sm font-bold">03.24.2026</p>
                 </div>
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-1">Purchased</p>
+                  <p className="text-sm font-bold">03.20.2026</p>
+                </div>
+                <div>
+                  <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-1">Owned By</p>
+                  <p className="text-sm font-bold">@meezy_user</p>
+                </div>
+              </div>
+              <div className="pt-2 border-t border-muted-foreground/20">
+                <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-2">Ownership History</p>
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-muted-foreground">03.20.2026</span>
+                    <span className="font-bold">@meezy_user</span>
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground border border-muted-foreground/30 px-2 py-0.5">Current</span>
+                  </div>
+                </div>
+              </div>
+              <motion.button
+                className="w-full border-2 border-foreground py-2.5 text-xs tracking-[0.3em] uppercase font-bold hover:bg-foreground hover:text-background transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                Transfer Ownership
+              </motion.button>
             </motion.div>
           </div>
         </motion.div>
