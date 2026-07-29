@@ -13,6 +13,9 @@ import Account from "./pages/Account.tsx";
 import Claim from "./pages/Claim.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import CertificateForm from "./pages/admin/CertificateForm.tsx";
+import AdminUsers from "./pages/admin/AdminUsers.tsx";
+import AdminAnalytics from "./pages/admin/AdminAnalytics.tsx";
+import AdminTransfers from "./pages/admin/AdminTransfers.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -35,6 +38,9 @@ const App = () => (
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/certificates/new" element={<CertificateForm />} />
             <Route path="/admin/certificates/:id" element={<CertificateForm />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/analytics" element={<AdminAnalytics />} />
+            <Route path="/admin/transfers" element={<AdminTransfers />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

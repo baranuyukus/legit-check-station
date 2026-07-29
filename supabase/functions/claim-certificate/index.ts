@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
 
   const { data: cert, error } = await admin
     .from("certificates")
-    .select("id, auth_code, product_name, owner_user_id")
+    .select("id, auth_code, product_name, owner_user_id, claim_locked, assigned_email")
     .eq("claim_token", token)
     .maybeSingle();
 
@@ -63,6 +63,18 @@ Deno.serve(async (req) => {
       },
       409,
     );
+  }
+
+  if (cert.claim_locked) {
+    const assignedToMe =
+      cert.assigned_email && user.email &&
+      cert.assigned_email.toLowerCase() === user.email.toLowerCase();
+    if (!assignedToMe) {
+      return json(
+        { error: "Bu ürünün sahipliği yönetici tarafından kilitlenmiş. Lütfen bizimle iletişime geçin." },
+        403,
+      );
+    }
   }
 
   const masked = maskEmail(user.email);
@@ -92,6 +104,16 @@ Deno.serve(async (req) => {
     transferred_at: nowIso.slice(0, 10),
     note: "QR kod ile sahiplik alındı",
   });
+
+  await admin.from("scan_events").insert({
+    certificate_id: cert.id,
+    auth_code: cert.auth_code,
+    kind: "claim",
+    device_type: null,
+    user_agent: (req.headers.get("user-agent") ?? "").slice(0, 400),
+    referrer: req.headers.get("referer"),
+  });
+
 
   return json({ ok: true, auth_code: cert.auth_code, product_name: cert.product_name });
 });

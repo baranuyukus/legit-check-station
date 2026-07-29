@@ -16,8 +16,11 @@ export type Database = {
     Tables: {
       certificates: {
         Row: {
+          assigned_at: string | null
+          assigned_email: string | null
           auth_code: string
           brand: string | null
+          claim_locked: boolean
           claim_token: string
           claimed_at: string | null
           colorway: string | null
@@ -40,8 +43,11 @@ export type Database = {
           verified_date: string
         }
         Insert: {
+          assigned_at?: string | null
+          assigned_email?: string | null
           auth_code: string
           brand?: string | null
+          claim_locked?: boolean
           claim_token?: string
           claimed_at?: string | null
           colorway?: string | null
@@ -64,8 +70,11 @@ export type Database = {
           verified_date?: string
         }
         Update: {
+          assigned_at?: string | null
+          assigned_email?: string | null
           auth_code?: string
           brand?: string | null
+          claim_locked?: boolean
           claim_token?: string
           claimed_at?: string | null
           colorway?: string | null
@@ -135,24 +144,86 @@ export type Database = {
           created_at: string
           display_name: string | null
           email: string | null
+          full_name: string | null
           id: string
+          phone: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           display_name?: string | null
           email?: string | null
+          full_name?: string | null
           id: string
+          phone?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           display_name?: string | null
           email?: string | null
+          full_name?: string | null
           id?: string
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []
+      }
+      scan_events: {
+        Row: {
+          auth_code: string | null
+          browser: string | null
+          certificate_id: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          id: string
+          ip_hash: string | null
+          kind: string
+          os: string | null
+          referrer: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          auth_code?: string | null
+          browser?: string | null
+          certificate_id?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          ip_hash?: string | null
+          kind?: string
+          os?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          auth_code?: string | null
+          browser?: string | null
+          certificate_id?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          ip_hash?: string | null
+          kind?: string
+          os?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_events_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "certificates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shopify_orders: {
         Row: {

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { resolveImageUrl, formatDate } from "@/lib/storage";
+import { logScan } from "@/lib/track";
 import meezyLogo from "@/assets/meezy-logo.png";
 
 const STEPS = [
@@ -41,6 +42,7 @@ const Verify = () => {
       setCert(data ?? null);
 
       if (data) {
+        logScan({ certificateId: data.id, authCode: data.auth_code, kind: "verify" });
         document.title = `${data.product_name} — Meezy Archive`;
         const [{ data: h }, url] = await Promise.all([
           supabase

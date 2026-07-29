@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { AdminQrPanel } from "@/components/AdminQrPanel";
+import { AdminAssignPanel } from "@/components/AdminAssignPanel";
 import { AdminLayout } from "@/components/AdminLayout";
 import { resolveImageUrl, formatDate } from "@/lib/storage";
 import { toast } from "sonner";
@@ -44,6 +45,11 @@ const CertificateForm = () => {
   const [imagePath, setImagePath] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [history, setHistory] = useState<History[]>([]);
+  const [assign, setAssign] = useState<{
+    assigned_email: string | null;
+    claim_locked: boolean;
+    owner_masked: string | null;
+  }>({ assigned_email: null, claim_locked: false, owner_masked: null });
   const [newOwner, setNewOwner] = useState("");
   const [transferDate, setTransferDate] = useState(new Date().toISOString().slice(0, 10));
   const [busy, setBusy] = useState(false);
@@ -74,6 +80,11 @@ const CertificateForm = () => {
           purchase_date: data.purchase_date ?? "",
           is_published: data.is_published,
         });
+        setAssign({
+          assigned_email: data.assigned_email,
+          claim_locked: data.claim_locked,
+          owner_masked: data.owner_masked,
+        });
         setImagePath(data.image_url);
         setImageUrl(await resolveImageUrl(data.image_url));
       }
@@ -92,6 +103,24 @@ const CertificateForm = () => {
       .eq("certificate_id", id!)
       .order("transferred_at", { ascending: false });
     setHistory(data ?? []);
+  };
+
+  const reloadAssign = async () => {
+    if (isNew) return;
+    const { data } = await supabase
+      .from("certificates")
+      .select("assigned_email, claim_locked, owner_masked, current_owner")
+      .eq("id", id!)
+      .maybeSingle();
+    if (data) {
+      setAssign({
+        assigned_email: data.assigned_email,
+        claim_locked: data.claim_locked,
+        owner_masked: data.owner_masked,
+      });
+      setForm((prev) => ({ ...prev, current_owner: data.current_owner ?? "" }));
+    }
+    await loadHistory();
   };
 
   const set = (key: string, value: string | boolean) =>
@@ -259,6 +288,16 @@ const CertificateForm = () => {
             {busy ? "..." : "Kaydet"}
           </button>
         </form>
+
+        {!isNew && (
+          <AdminAssignPanel
+            certificateId={id!}
+            assignedEmail={assign.assigned_email}
+            claimLocked={assign.claim_locked}
+            ownerMasked={assign.owner_masked}
+            onChanged={reloadAssign}
+          />
+        )}
 
         {!isNew && <AdminQrPanel certificateId={id!} />}
 

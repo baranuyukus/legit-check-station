@@ -41,7 +41,7 @@ const AdminDashboard = () => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
     return items.filter((i) =>
-      [i.auth_code, i.product_name, i.brand, i.current_owner, i.size]
+      [i.auth_code, i.product_name, i.brand, i.current_owner, i.size, i.assigned_email]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q)),
     );
@@ -53,10 +53,14 @@ const AdminDashboard = () => {
       const d = new Date(i.created_at);
       return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     }).length;
+    const owned = items.filter((i) => i.owner_user_id).length;
     return {
       total: items.length,
       published: items.filter((i) => i.is_published).length,
-      drafts: items.filter((i) => !i.is_published).length,
+      owned,
+      unclaimed: items.length - owned,
+      pendingAssign: items.filter((i) => i.assigned_email && !i.owner_user_id).length,
+      locked: items.filter((i) => i.claim_locked).length,
       thisMonth,
     };
   }, [items]);
@@ -64,11 +68,13 @@ const AdminDashboard = () => {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 border-2 border-foreground divide-x-0 md:divide-x-2 divide-foreground">
+        <div className="grid grid-cols-2 md:grid-cols-6 border-2 border-foreground md:divide-x-2 divide-foreground">
           <Stat label="Toplam" value={stats.total} />
           <Stat label="Yayında" value={stats.published} />
-          <Stat label="Taslak" value={stats.drafts} />
-          <Stat label="Bu Ay" value={stats.thisMonth} />
+          <Stat label="Sahipli" value={stats.owned} />
+          <Stat label="Sahipsiz" value={stats.unclaimed} />
+          <Stat label="Bekleyen Atama" value={stats.pendingAssign} />
+          <Stat label="Claim Kapalı" value={stats.locked} />
         </div>
 
         <div className="flex gap-3 flex-wrap">
