@@ -79,6 +79,11 @@ const CertificateForm = () => {
           purchase_date: data.purchase_date ?? "",
           is_published: data.is_published,
         });
+        setAssign({
+          assigned_email: data.assigned_email,
+          claim_locked: data.claim_locked,
+          owner_masked: data.owner_masked,
+        });
         setImagePath(data.image_url);
         setImageUrl(await resolveImageUrl(data.image_url));
       }
