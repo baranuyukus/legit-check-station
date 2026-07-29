@@ -42,7 +42,6 @@ const Verify = () => {
 
       if (data) {
         logScan({ certificateId: data.id, authCode: data.auth_code, kind: "verify" });
-      }
         document.title = `${data.product_name} — Meezy Archive`;
         const [{ data: h }, url] = await Promise.all([
           supabase
