@@ -53,10 +53,14 @@ const AdminDashboard = () => {
       const d = new Date(i.created_at);
       return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     }).length;
+    const owned = items.filter((i) => i.owner_user_id).length;
     return {
       total: items.length,
       published: items.filter((i) => i.is_published).length,
-      drafts: items.filter((i) => !i.is_published).length,
+      owned,
+      unclaimed: items.length - owned,
+      pendingAssign: items.filter((i) => i.assigned_email && !i.owner_user_id).length,
+      locked: items.filter((i) => i.claim_locked).length,
       thisMonth,
     };
   }, [items]);
