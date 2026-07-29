@@ -44,6 +44,11 @@ const CertificateForm = () => {
   const [imagePath, setImagePath] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [history, setHistory] = useState<History[]>([]);
+  const [assign, setAssign] = useState<{
+    assigned_email: string | null;
+    claim_locked: boolean;
+    owner_masked: string | null;
+  }>({ assigned_email: null, claim_locked: false, owner_masked: null });
   const [newOwner, setNewOwner] = useState("");
   const [transferDate, setTransferDate] = useState(new Date().toISOString().slice(0, 10));
   const [busy, setBusy] = useState(false);
