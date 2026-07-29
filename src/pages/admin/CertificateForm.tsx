@@ -104,6 +104,24 @@ const CertificateForm = () => {
     setHistory(data ?? []);
   };
 
+  const reloadAssign = async () => {
+    if (isNew) return;
+    const { data } = await supabase
+      .from("certificates")
+      .select("assigned_email, claim_locked, owner_masked, current_owner")
+      .eq("id", id!)
+      .maybeSingle();
+    if (data) {
+      setAssign({
+        assigned_email: data.assigned_email,
+        claim_locked: data.claim_locked,
+        owner_masked: data.owner_masked,
+      });
+      setForm((prev) => ({ ...prev, current_owner: data.current_owner ?? "" }));
+    }
+    await loadHistory();
+  };
+
   const set = (key: string, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
