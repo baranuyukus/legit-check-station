@@ -41,7 +41,7 @@ const AdminDashboard = () => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
     return items.filter((i) =>
-      [i.auth_code, i.product_name, i.brand, i.current_owner, i.size]
+      [i.auth_code, i.product_name, i.brand, i.current_owner, i.size, i.assigned_email]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q)),
     );
