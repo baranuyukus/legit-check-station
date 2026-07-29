@@ -33,6 +33,7 @@ const Account = () => {
 
   const [items, setItems] = useState<Certificate[]>([]);
   const [images, setImages] = useState<Record<string, string | null>>({});
+  const [tokens, setTokens] = useState<Record<string, string>>({});
   const [outgoing, setOutgoing] = useState<TransferRequest[]>([]);
   const [busy, setBusy] = useState(false);
   const [fetching, setFetching] = useState(true);
