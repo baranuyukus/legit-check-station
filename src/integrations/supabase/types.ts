@@ -263,6 +263,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_claim_token: { Args: { _certificate_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
