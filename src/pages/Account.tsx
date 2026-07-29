@@ -203,11 +203,13 @@ const Account = () => {
                   </div>
 
                   <div className="border-t-2 border-foreground p-4 flex items-center gap-4">
-                    <QrCode
-                      value={`${window.location.origin}/claim/${c.claim_token}`}
-                      size={84}
-                      alt={`${c.product_name} QR kodu`}
-                    />
+                    {tokens[c.id] && (
+                      <QrCode
+                        value={`${window.location.origin}/claim/${tokens[c.id]}`}
+                        size={84}
+                        alt={`${c.product_name} QR kodu`}
+                      />
+                    )}
                     <p className="text-[10px] leading-relaxed text-muted-foreground">
                       Ürün QR kodu. Sahiplik devri sonrasında yeni sahip bu kodu kullanamaz; devir
                       e-posta kodu ile yapılır.
