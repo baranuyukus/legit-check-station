@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
+import { AdminQrPanel } from "@/components/AdminQrPanel";
 import { AdminLayout } from "@/components/AdminLayout";
 import { resolveImageUrl, formatDate } from "@/lib/storage";
 import { toast } from "sonner";
@@ -258,6 +259,8 @@ const CertificateForm = () => {
             {busy ? "..." : "Kaydet"}
           </button>
         </form>
+
+        {!isNew && <AdminQrPanel certificateId={id!} />}
 
         {!isNew && (
           <div className="border-2 border-foreground p-6 space-y-5">

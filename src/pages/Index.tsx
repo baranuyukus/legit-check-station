@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import meezyLogo from "@/assets/meezy-logo.png";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground font-mono flex flex-col">
+      <SiteHeader />
       <main className="flex-1 flex flex-col items-center justify-center px-4">
         <motion.img
           src={meezyLogo}
