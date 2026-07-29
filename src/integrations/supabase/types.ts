@@ -18,6 +18,8 @@ export type Database = {
         Row: {
           auth_code: string
           brand: string | null
+          claim_token: string
+          claimed_at: string | null
           colorway: string | null
           condition: string
           created_at: string
@@ -26,8 +28,13 @@ export type Database = {
           image_url: string | null
           is_published: boolean
           notes: string | null
+          owner_masked: string | null
+          owner_user_id: string | null
           product_name: string
           purchase_date: string | null
+          shopify_line_item_id: string | null
+          shopify_order_id: string | null
+          shopify_order_name: string | null
           size: string | null
           updated_at: string
           verified_date: string
@@ -35,6 +42,8 @@ export type Database = {
         Insert: {
           auth_code: string
           brand?: string | null
+          claim_token?: string
+          claimed_at?: string | null
           colorway?: string | null
           condition?: string
           created_at?: string
@@ -43,8 +52,13 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean
           notes?: string | null
+          owner_masked?: string | null
+          owner_user_id?: string | null
           product_name: string
           purchase_date?: string | null
+          shopify_line_item_id?: string | null
+          shopify_order_id?: string | null
+          shopify_order_name?: string | null
           size?: string | null
           updated_at?: string
           verified_date?: string
@@ -52,6 +66,8 @@ export type Database = {
         Update: {
           auth_code?: string
           brand?: string | null
+          claim_token?: string
+          claimed_at?: string | null
           colorway?: string | null
           condition?: string
           created_at?: string
@@ -60,8 +76,13 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean
           notes?: string | null
+          owner_masked?: string | null
+          owner_user_id?: string | null
           product_name?: string
           purchase_date?: string | null
+          shopify_line_item_id?: string | null
+          shopify_order_id?: string | null
+          shopify_order_name?: string | null
           size?: string | null
           updated_at?: string
           verified_date?: string
@@ -73,24 +94,30 @@ export type Database = {
           certificate_id: string
           created_at: string
           id: string
+          kind: string
           note: string | null
           owner_handle: string
+          owner_user_id: string | null
           transferred_at: string
         }
         Insert: {
           certificate_id: string
           created_at?: string
           id?: string
+          kind?: string
           note?: string | null
           owner_handle: string
+          owner_user_id?: string | null
           transferred_at?: string
         }
         Update: {
           certificate_id?: string
           created_at?: string
           id?: string
+          kind?: string
           note?: string | null
           owner_handle?: string
+          owner_user_id?: string | null
           transferred_at?: string
         }
         Relationships: [
@@ -126,6 +153,89 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      shopify_orders: {
+        Row: {
+          created_at: string
+          customer_email: string | null
+          id: string
+          order_name: string | null
+          payload: Json
+          processed_at: string | null
+          shopify_order_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email?: string | null
+          id?: string
+          order_name?: string | null
+          payload?: Json
+          processed_at?: string | null
+          shopify_order_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string | null
+          id?: string
+          order_name?: string | null
+          payload?: Json
+          processed_at?: string | null
+          shopify_order_id?: string
+        }
+        Relationships: []
+      }
+      transfer_requests: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          attempts: number
+          certificate_id: string
+          code_hash: string
+          created_at: string
+          expires_at: string
+          from_user_id: string | null
+          id: string
+          status: string
+          to_email: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          attempts?: number
+          certificate_id: string
+          code_hash: string
+          created_at?: string
+          expires_at?: string
+          from_user_id?: string | null
+          id?: string
+          status?: string
+          to_email: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          attempts?: number
+          certificate_id?: string
+          code_hash?: string
+          created_at?: string
+          expires_at?: string
+          from_user_id?: string | null
+          id?: string
+          status?: string
+          to_email?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transfer_requests_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "certificates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
