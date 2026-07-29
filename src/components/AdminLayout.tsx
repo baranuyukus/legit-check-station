@@ -38,6 +38,9 @@ export const AdminLayout = ({ children }: { children: ReactNode }) => {
 
   const navItems = [
     { to: "/admin", label: "Panel" },
+    { to: "/admin/users", label: "Kullanıcılar" },
+    { to: "/admin/analytics", label: "Trafik" },
+    { to: "/admin/transfers", label: "Transferler" },
     { to: "/admin/certificates/new", label: "Yeni Kayıt" },
   ];
 
