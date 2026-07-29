@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
 
   const { data: cert, error } = await admin
     .from("certificates")
-    .select("id, auth_code, product_name, owner_user_id")
+    .select("id, auth_code, product_name, owner_user_id, claim_locked, assigned_email")
     .eq("claim_token", token)
     .maybeSingle();
 
