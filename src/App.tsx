@@ -13,6 +13,9 @@ import Account from "./pages/Account.tsx";
 import Claim from "./pages/Claim.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import CertificateForm from "./pages/admin/CertificateForm.tsx";
+import AdminUsers from "./pages/admin/AdminUsers.tsx";
+import AdminAnalytics from "./pages/admin/AdminAnalytics.tsx";
+import AdminTransfers from "./pages/admin/AdminTransfers.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
