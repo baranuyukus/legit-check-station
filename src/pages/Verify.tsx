@@ -209,8 +209,19 @@ const Verify = () => {
                 <Field label="Doğrulama Kodu" value={cert.auth_code} />
                 <Field label="Doğrulandı" value={formatDate(cert.verified_date)} />
                 <Field label="Satın Alım" value={formatDate(cert.purchase_date)} />
-                <Field label="Sahip" value={cert.current_owner} />
+                <Field
+                  label="Sahip"
+                  value={cert.owner_masked ?? cert.current_owner ?? "Sahiplik alınmadı"}
+                />
               </div>
+
+              {!cert.claimed_at && (
+                <p className="border-2 border-foreground p-3 text-[10px] leading-relaxed">
+                  Bu ürünün sahipliği henüz alınmamış. Ürün etiketindeki QR kodu okutarak sahipliği
+                  hesabınıza tanımlayabilirsiniz.
+                </p>
+              )}
+
 
               {history.length > 0 && (
                 <div className="pt-2 border-t border-muted-foreground/20">
