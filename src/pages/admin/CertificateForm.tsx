@@ -259,6 +259,8 @@ const CertificateForm = () => {
           </button>
         </form>
 
+        {!isNew && <AdminQrPanel certificateId={id!} />}
+
         {!isNew && (
           <div className="border-2 border-foreground p-6 space-y-5">
             <h2 className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
