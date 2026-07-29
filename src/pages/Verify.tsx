@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { resolveImageUrl, formatDate } from "@/lib/storage";
+import { logScan } from "@/lib/track";
 import meezyLogo from "@/assets/meezy-logo.png";
 
 const STEPS = [
