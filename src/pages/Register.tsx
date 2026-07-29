@@ -8,10 +8,20 @@ import meezyLogo from "@/assets/meezy-logo.png";
 import { safeNext } from "./Login";
 
 const schema = z.object({
-  displayName: z.string().trim().min(2, "İsim en az 2 karakter olmalı").max(80),
+  fullName: z.string().trim().min(3, "Ad soyad en az 3 karakter olmalı").max(80),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "Geçerli bir telefon numarası girin")
+    .max(20, "Telefon numarası çok uzun")
+    .regex(/^[0-9+()\s-]+$/, "Telefon sadece rakam ve + ( ) - içerebilir"),
   email: z.string().trim().email("Geçerli bir e-posta girin").max(255),
   password: z.string().min(6, "Şifre en az 6 karakter olmalı").max(72),
 });
+
+const fieldClass =
+  "w-full border-2 border-foreground bg-transparent px-3 py-2 text-sm outline-none focus:bg-secondary";
+const labelClass = "text-[10px] tracking-[0.3em] uppercase text-muted-foreground block";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,7 +29,8 @@ const Register = () => {
   const [params] = useSearchParams();
   const next = safeNext(params.get("next"));
 
-  const [displayName, setDisplayName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -34,7 +45,7 @@ const Register = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = schema.safeParse({ displayName, email, password });
+    const parsed = schema.safeParse({ fullName, phone, email, password });
     if (!parsed.success) return toast.error(parsed.error.errors[0].message);
 
     setBusy(true);
@@ -43,7 +54,11 @@ const Register = () => {
       password: parsed.data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/hesabim`,
-        data: { display_name: parsed.data.displayName },
+        data: {
+          display_name: parsed.data.fullName,
+          full_name: parsed.data.fullName,
+          phone: parsed.data.phone,
+        },
       },
     });
     setBusy(false);
@@ -67,20 +82,35 @@ const Register = () => {
           <h1 className="text-xs tracking-[0.3em] uppercase font-bold text-center">Kayıt Ol</h1>
 
           <div className="space-y-2">
-            <label htmlFor="reg-name" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground block">
+            <label htmlFor="reg-name" className={labelClass}>
               Ad Soyad
             </label>
             <input
               id="reg-name"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               autoComplete="name"
-              className="w-full border-2 border-foreground bg-transparent px-3 py-2 text-sm outline-none focus:bg-secondary"
+              className={fieldClass}
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="reg-email" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground block">
+            <label htmlFor="reg-phone" className={labelClass}>
+              Telefon
+            </label>
+            <input
+              id="reg-phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              autoComplete="tel"
+              placeholder="+90 5XX XXX XX XX"
+              className={fieldClass}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="reg-email" className={labelClass}>
               E-posta
             </label>
             <input
@@ -89,7 +119,7 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
-              className="w-full border-2 border-foreground bg-transparent px-3 py-2 text-sm outline-none focus:bg-secondary"
+              className={fieldClass}
             />
             <p className="text-[10px] text-muted-foreground leading-relaxed">
               Shopify siparişinizde kullandığınız e-posta ile kayıt olun; ürünleriniz otomatik eşleşir.
@@ -97,7 +127,7 @@ const Register = () => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="reg-password" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground block">
+            <label htmlFor="reg-password" className={labelClass}>
               Şifre
             </label>
             <input
@@ -106,7 +136,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
-              className="w-full border-2 border-foreground bg-transparent px-3 py-2 text-sm outline-none focus:bg-secondary"
+              className={fieldClass}
             />
           </div>
 
