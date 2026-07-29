@@ -65,6 +65,18 @@ Deno.serve(async (req) => {
     );
   }
 
+  if (cert.claim_locked) {
+    const assignedToMe =
+      cert.assigned_email && user.email &&
+      cert.assigned_email.toLowerCase() === user.email.toLowerCase();
+    if (!assignedToMe) {
+      return json(
+        { error: "Bu ürünün sahipliği yönetici tarafından kilitlenmiş. Lütfen bizimle iletişime geçin." },
+        403,
+      );
+    }
+  }
+
   const masked = maskEmail(user.email);
   const nowIso = new Date().toISOString();
 
