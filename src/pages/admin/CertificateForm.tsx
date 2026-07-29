@@ -288,6 +288,16 @@ const CertificateForm = () => {
           </button>
         </form>
 
+        {!isNew && (
+          <AdminAssignPanel
+            certificateId={id!}
+            assignedEmail={assign.assigned_email}
+            claimLocked={assign.claim_locked}
+            ownerMasked={assign.owner_masked}
+            onChanged={reloadAssign}
+          />
+        )}
+
         {!isNew && <AdminQrPanel certificateId={id!} />}
 
         {!isNew && (
