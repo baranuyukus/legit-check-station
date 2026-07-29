@@ -105,5 +105,15 @@ Deno.serve(async (req) => {
     note: "QR kod ile sahiplik alındı",
   });
 
+  await admin.from("scan_events").insert({
+    certificate_id: cert.id,
+    auth_code: cert.auth_code,
+    kind: "claim",
+    device_type: null,
+    user_agent: (req.headers.get("user-agent") ?? "").slice(0, 400),
+    referrer: req.headers.get("referer"),
+  });
+
+
   return json({ ok: true, auth_code: cert.auth_code, product_name: cert.product_name });
 });
