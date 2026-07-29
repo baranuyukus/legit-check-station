@@ -27,18 +27,23 @@ const Auth = () => {
     setBusy(true);
     try {
       if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword(parsed.data);
+        const { error } = await supabase.auth.signInWithPassword({
+          email: parsed.data.email,
+          password: parsed.data.password,
+        });
         if (error) throw error;
         navigate("/admin");
       } else {
         const { error } = await supabase.auth.signUp({
-          ...parsed.data,
+          email: parsed.data.email,
+          password: parsed.data.password,
           options: { emailRedirectTo: `${window.location.origin}/admin` },
         });
         if (error) throw error;
         toast.success("Hesap oluşturuldu. Admin yetkisi verilmesi gerekiyor.");
         navigate("/admin");
       }
+
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
