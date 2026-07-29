@@ -75,6 +75,14 @@ const Account = () => {
       list.map(async (c) => [c.id, await resolveImageUrl(c.image_url)] as const),
     );
     setImages(Object.fromEntries(entries));
+
+    const tokenEntries = await Promise.all(
+      list.map(async (c) => {
+        const { data } = await supabase.rpc("get_claim_token", { _certificate_id: c.id });
+        return [c.id, data ?? ""] as const;
+      }),
+    );
+    setTokens(Object.fromEntries(tokenEntries.filter(([, t]) => t)));
   }, [session]);
 
   useEffect(() => {
