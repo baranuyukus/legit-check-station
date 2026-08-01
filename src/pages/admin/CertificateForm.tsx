@@ -61,9 +61,7 @@ const CertificateForm = () => {
 
     const load = async () => {
       const { data, error } = await supabase
-        .from("certificates")
-        .select("*")
-        .eq("id", id!)
+        .rpc("admin_get_certificate", { _id: id! })
         .maybeSingle();
       if (error) toast.error(error.message);
       if (data) {
@@ -108,9 +106,7 @@ const CertificateForm = () => {
   const reloadAssign = async () => {
     if (isNew) return;
     const { data } = await supabase
-      .from("certificates")
-      .select("assigned_email, claim_locked, owner_masked, current_owner")
-      .eq("id", id!)
+      .rpc("admin_get_certificate", { _id: id! })
       .maybeSingle();
     if (data) {
       setAssign({
