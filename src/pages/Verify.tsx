@@ -16,7 +16,10 @@ const STEPS = [
   "Orijinallik onaylanıyor...",
 ];
 
-type Certificate = Tables<"certificates">;
+type Certificate = Omit<
+  Tables<"certificates">,
+  "claim_token" | "assigned_email" | "shopify_order_id" | "shopify_order_name" | "shopify_line_item_id"
+>;
 type History = Tables<"ownership_history">;
 
 const Verify = () => {
