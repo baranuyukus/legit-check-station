@@ -334,6 +334,78 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_get_certificate: {
+        Args: { _id: string }
+        Returns: {
+          assigned_at: string | null
+          assigned_email: string | null
+          auth_code: string
+          brand: string | null
+          claim_locked: boolean
+          claim_token: string
+          claimed_at: string | null
+          colorway: string | null
+          condition: string
+          created_at: string
+          current_owner: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean
+          notes: string | null
+          owner_masked: string | null
+          owner_user_id: string | null
+          product_name: string
+          purchase_date: string | null
+          shopify_line_item_id: string | null
+          shopify_order_id: string | null
+          shopify_order_name: string | null
+          size: string | null
+          updated_at: string
+          verified_date: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "certificates"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      admin_list_certificates: {
+        Args: never
+        Returns: {
+          assigned_at: string | null
+          assigned_email: string | null
+          auth_code: string
+          brand: string | null
+          claim_locked: boolean
+          claim_token: string
+          claimed_at: string | null
+          colorway: string | null
+          condition: string
+          created_at: string
+          current_owner: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean
+          notes: string | null
+          owner_masked: string | null
+          owner_user_id: string | null
+          product_name: string
+          purchase_date: string | null
+          shopify_line_item_id: string | null
+          shopify_order_id: string | null
+          shopify_order_name: string | null
+          size: string | null
+          updated_at: string
+          verified_date: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "certificates"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_claim_token: { Args: { _certificate_id: string }; Returns: string }
       has_role: {
         Args: {
