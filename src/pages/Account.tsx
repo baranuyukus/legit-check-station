@@ -9,7 +9,10 @@ import { QrCode } from "@/components/QrCode";
 import { toast } from "sonner";
 import { z } from "zod";
 
-type Certificate = Tables<"certificates">;
+type Certificate = Omit<
+  Tables<"certificates">,
+  "claim_token" | "assigned_email" | "shopify_order_id" | "shopify_order_name" | "shopify_line_item_id"
+>;
 type TransferRequest = Tables<"transfer_requests">;
 
 const emailSchema = z.string().trim().email("Geçerli bir e-posta girin").max(255);
