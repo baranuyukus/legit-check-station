@@ -56,7 +56,7 @@ const Account = () => {
     const [{ data: certs }, { data: reqs }] = await Promise.all([
       supabase
         .from("certificates")
-        .select("*")
+        .select("id, auth_code, product_name, brand, size, colorway, condition, image_url, verified_date, purchase_date, current_owner, notes, is_published, created_at, updated_at, owner_user_id, owner_masked, claimed_at, claim_locked, assigned_at")
         .eq("owner_user_id", session.user.id)
         .order("claimed_at", { ascending: false }),
       supabase

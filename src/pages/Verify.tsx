@@ -34,7 +34,7 @@ const Verify = () => {
     const load = async () => {
       const { data } = await supabase
         .from("certificates")
-        .select("*")
+        .select("id, auth_code, product_name, brand, size, colorway, condition, image_url, verified_date, purchase_date, current_owner, notes, is_published, created_at, updated_at, owner_user_id, owner_masked, claimed_at, claim_locked, assigned_at")
         .eq("auth_code", (code ?? "").toUpperCase())
         .maybeSingle();
 

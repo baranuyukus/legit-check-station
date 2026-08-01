@@ -15,10 +15,7 @@ const AdminDashboard = () => {
 
   const load = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("certificates")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const { data, error } = await supabase.rpc("admin_list_certificates");
     if (error) toast.error(error.message);
     setItems(data ?? []);
     setLoading(false);
